@@ -7,8 +7,8 @@
 
    Crossword Puzzle Script
    
-   Author: 
-   Date:   
+   Author: Gabriel Hernandez
+   Date: 3/26/19 
    
    Global Variables
    ================
@@ -49,8 +49,35 @@
 
 */
 
+var allLetters;
+var currentLetter;
+var wordLetters;
+var acrossClue;
+var downClue;
+var typeDirection;
+
+window.onload = init;
+
+//sets up the condidtions of the puzzle
+function init() {
+      allLetters = document.querySelectorAll("table#crossword span");
+      
+      //
+      currentLetter = allLetters[0];
+      //
+
+      
+      
+      
+      var acrossID = currentLetter.getAttribute("data-clue-a").value;
+      var downID = currentLetter.getAttribute("data-clue-d").value;
+
+      var acrossClue = document.getElementById
 
 
+
+
+}
 
 
    
