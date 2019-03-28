@@ -65,18 +65,71 @@ function init() {
       //
       currentLetter = allLetters[0];
       //
-
       
-      
-      
-      var acrossID = currentLetter.getAttribute("data-clue-a").value;
-      var downID = currentLetter.getAttribute("data-clue-d").value;
+      var acrossID = currentLetter.dataset.clueA.value;
+      var downID = currentLetter.dataset.clueD.value;
 
-      var acrossClue = document.getElementById
+      acrossClue = document.getElementById("acrossID");
+      downClue = document.getElementById("downID");
 
+      //color cross word's first letter
+      formatPuzzle(currentLetter);
 
+      for (var i = 0; i < allLetters.length; i++) {
+            allLetters[i].style.cursor = "pointer";
+            allLetters[i].onmouse = function (e) {
+                  formatPuzzle(e.target)
+            };
+      }
+      document.onkeydown = selectLetter;
+}
 
+//format the colors for the puzzle's cells and clues
+function formatPuzzle(puzzleLetter) {
+      currentLetter = puzzleLetter;
 
+      for (var i = 0; i < allLetters.length; i++) {
+            allLetters[i].style.backgroundColor = "";
+      }
+
+      acrossClue.style.color = "";
+      downClue.style.color = "";
+
+      if (currentLetter.dataset.clueA !== undefined) {
+            acrossClue = currentLetter.dataset.clueA;
+            acrossClue.style.color = "blue";
+            wordLetters = document.querySelectorAll("[data-clue-a = " + currentLetter.dataset.clueA + "]");
+            for (var i = 0; i < wordLetters.length; i++) {
+                  wordLetters[i].style.backgroundColor = "rgb(231, 231, 255)";      
+            }
+            
+      }
+
+      if (currentLetter.dataset.clueD !== undefined) {
+            downClue = currentLetter.dataset.clueD;
+            downClue.style.color = "red";
+            wordLetters = document.querySelectorAll("[data-clue-d = " + currentLetter.dataset.clueD + "]");
+            for (var i = 0; i < wordLetters.length; i++) {
+                  wordLetters[i].style.backgroundColor = "rgb(255, 231, 231)";
+            }
+            
+      }
+
+      if (typeDirection === "right") {
+            currentLetter.style.backgroundColor = "rgb(191, 191, 255)";
+      } else {
+            currentLetter.style.backgroundColor = "rgb(255, 191, 191)";
+      }
+}
+
+//selecto puzzle cells using key board
+function selectLetter(e) {
+      var leftLetter = document.getElementById(currentLetter.dataset.left);
+      var upLetter = document.getElementById(currentLetter.dataset.up);
+      var downLetter = document.getElementById(currentLetter.dataset.down);
+      var rightLetter = document.getElementById(currentLetter.dataset.right);
+
+      var userKey = e.keyCode;
 }
 
 
