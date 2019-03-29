@@ -54,7 +54,7 @@ var currentLetter;
 var wordLetters;
 var acrossClue;
 var downClue;
-var typeDirection;
+var typeDirection= "right";
 
 window.onload = init;
 
@@ -69,19 +69,38 @@ function init() {
       var acrossID = currentLetter.dataset.clueA.value;
       var downID = currentLetter.dataset.clueD.value;
 
-      acrossClue = document.getElementById("acrossID");
-      downClue = document.getElementById("downID");
+      acrossClue = document.getElementById(currentLetter.dataset.clueA);
+      downClue = document.getElementById(currentLetter.dataset.clueD);
 
       //color cross word's first letter
       formatPuzzle(currentLetter);
 
       for (var i = 0; i < allLetters.length; i++) {
             allLetters[i].style.cursor = "pointer";
-            allLetters[i].onmouse = function (e) {
-                  formatPuzzle(e.target)
+            allLetters[i].onmousedown = function (e) {
+                  formatPuzzle(e.target);
             };
       }
+
       document.onkeydown = selectLetter;
+
+      var typeImage = document.getElementById("directionImg");
+      typeImage.style.cursor = "pointer";
+      typeImage.onclick = switchTypeDirection;
+      
+      document.addEventListener("onclick", function () {
+            for (var i = 0; i < allLetters.length; i++) {
+                  if (textContent !== dataset.letter) {
+                        letter.style.color = "red";
+                  }
+                  setTimeout(function () {
+                        for (var i = 0; i < allLetters.length; i++) {
+                              allLetters[i].style.color = "";
+                        }
+                  },3000);
+            }           
+      });
+
 }
 
 //format the colors for the puzzle's cells and clues
@@ -96,7 +115,7 @@ function formatPuzzle(puzzleLetter) {
       downClue.style.color = "";
 
       if (currentLetter.dataset.clueA !== undefined) {
-            acrossClue = currentLetter.dataset.clueA;
+            acrossClue = document.getElementById(currentLetter.dataset.clueA);
             acrossClue.style.color = "blue";
             wordLetters = document.querySelectorAll("[data-clue-a = " + currentLetter.dataset.clueA + "]");
             for (var i = 0; i < wordLetters.length; i++) {
@@ -106,7 +125,7 @@ function formatPuzzle(puzzleLetter) {
       }
 
       if (currentLetter.dataset.clueD !== undefined) {
-            downClue = currentLetter.dataset.clueD;
+            downClue = document.getElementById(currentLetter.dataset.clueD);
             downClue.style.color = "red";
             wordLetters = document.querySelectorAll("[data-clue-d = " + currentLetter.dataset.clueD + "]");
             for (var i = 0; i < wordLetters.length; i++) {
@@ -122,7 +141,7 @@ function formatPuzzle(puzzleLetter) {
       }
 }
 
-//selecto puzzle cells using key board
+//selector puzzle cells using key board
 function selectLetter(e) {
       var leftLetter = document.getElementById(currentLetter.dataset.left);
       var upLetter = document.getElementById(currentLetter.dataset.up);
@@ -130,7 +149,45 @@ function selectLetter(e) {
       var rightLetter = document.getElementById(currentLetter.dataset.right);
 
       var userKey = e.keyCode;
+      
+      // etermines the response based on the value of the key pressed
+      if (userKey === 37) {
+            formatPuzzle(leftLetter);
+      } else if (userKey === 38) {
+            formatPuzzle(upLetter); 
+      } else if (userKey === 39 || userKey === 9) {
+            formatPuzzle(rightLetter);
+      } else if (userKey === 40 || userKey === 13) {
+            formatPuzzle(downLetter);
+      } else if (userKey === 8 || userKey === 46) {
+            currentLetter.textContent = "";
+      } else if (userKey === 32) {
+            switchTypeDirection();
+      } else if (userKey >= 65 && userKey  <= 90) {
+            currentLetter.textContent = getChar(userKey);
+            if (typeDirection === "right") {
+                  formatPuzzle(rightLetter);
+            } else {
+                  formatPuzzle(downLetter);
+            }
+      } 
+      e.preventDefault();
+      
 }
+
+//changes the direction(right or down) the user is typing
+ function switchTypeDirection() {
+      var typeImage = document.getElementById("directionImg");
+      if (typeDirection === "right") { 
+            typeDirection = "down";
+            typeImage.src = "pc_down.png";
+            currentLetter.style.backgroundColor = "rgb(255, 191, 191)";
+      } else {
+            typeDirection = "right";
+            typeImage.src = "pc_right.png";
+            currentLetter.style.backgroundColor = "rgb(191, 191, 255)";
+      }
+ }
 
 
    
